@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aravind Mohan</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Caveat:wght@400;600;700&family=Share+Tech+Mono&family=Space+Grotesk:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/foundation.css?v=11">
+  <link rel="stylesheet" href="css/phase2.css?v=17">
+</head>
+<body>
+
+  <div class="bg-stack" aria-hidden="true">
+    <div class="bg-gradient"></div>
+    <div class="bg-halftone" id="bg-halftone">
+      <div class="bg-halftone__tile"></div>
+      <canvas class="bg-halftone__canvas" id="halftone-canvas"></canvas>
+    </div>
+    <div class="bg-wash"></div>
+    <div class="paper-grain"></div>
+    <div class="vignette"></div>
+  </div>
+
+  <div id="intro" class="intro intro--phase-static">
+    <div class="intro-grain" aria-hidden="true"></div>
+    <div class="intro-bars" aria-hidden="true">
+      <div class="intro-bar"></div>
+      <div class="intro-bar"></div>
+      <div class="intro-bar"></div>
+    </div>
+    <div class="intro-label">// entering dimension</div>
+    <button type="button" class="intro-skip" id="intro-skip">ENTER</button>
+  </div>
+
+  <div class="site-root">
+
+    <nav>
+      <div class="logo">AM</div>
+      <div style="display:flex;gap:24px;">
+        <a href="#about">ABOUT</a>
+        <a href="#experience">EXP</a>
+        <a href="#projects">WORK</a>
+        <a href="#writing">WRITING</a>
+        <a href="#notes">NOTES</a>
+        <a href="#hobbies">HOBBIES</a>
+        <a href="#contact">CONTACT</a>
+      </div>
+    </nav>
+
+    <section class="hero">
+      <div class="hero-text">
+        <div class="hero-eyebrow">Generalist · Builder · Curiosity-driven</div>
+        <h1 class="hero-name">ARAVIND<br><span>MOHAN</span></h1>
+        <div class="hero-role">Full Stack × Applied AI Engineer</div>
+        <div class="hero-cta">
+          <a href="#about" class="btn btn-primary">READ ABOUT</a>
+          <a href="#projects" class="btn btn-secondary">SEE THE WORK</a>
+          <a href="https://github.com/AravindMohan10" class="btn btn-secondary" target="_blank" rel="noopener">GITHUB</a>
+        </div>
+      </div>
+
+      <div class="hero-visual">
+        <div class="panel hero-card">
+          <div class="hero-card-title">AGENT LOG #047</div>
+          <div class="hero-card-inner">
+            <div class="stat-row"><span>STATUS</span><span class="stat-val">ACTIVE</span></div>
+            <div class="stat-row"><span>EXPERIENCE</span><span class="stat-val">5+ YRS</span></div>
+            <div class="stat-row"><span>LOOKING FOR</span><span class="stat-val">FOUNDING · FS × AI</span></div>
+            <div class="stat-row"><span>CURIOSITY</span><span class="stat-val">∞</span></div>
+            <div class="stat-row"><span>RESEARCH</span><span class="stat-val">IN PIPELINE</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="about" class="about-section">
+      <h2 class="section-header cmyk" data-text="ABOUT">ABOUT</h2>
+      <div class="about-layout">
+        <div class="about-panel">
+          <p class="about-lead">Hi, I'm Aravind Mohan.</p>
+          <div class="about-body">
+            <p>I'm driven by curiosity. I default to taking things apart to understand how they actually work, then building my own version, usually rougher around the edges than the original, but mine. That instinct has shaped pretty much everything I've worked on, whether it's a full-stack product or the AI systems, agents especially, running underneath it.</p>
+            <p>I did my Master's in Computer Science at the University at Buffalo, specializing in AI/ML, which is where the pull toward agents and applied AI really took hold. Before that, I worked at Siemens as a software engineer. The job was closer to product engineering: building software that large industrial teams actually used, for clients including BMW, Tesla, and Audi. Since then I've moved through full-stack and applied AI roles at smaller, earlier-stage teams, the kind of environment where you end up wearing a lot of hats and learning fast because there's no one else to hand things off to.</p>
+            <p>That's the environment I want more of. I like being close to the whole problem, not just my slice of it: the agent logic, the backend it runs on, the interface someone actually uses. I'm not chasing a narrow specialty. I want to keep building end to end, keep learning as I go, and get genuinely good at the intersection of full-stack engineering and AI, not just competent at both separately.</p>
+          </div>
+        </div>
+        <div class="about-photo-wrap">
+          <figure class="about-photo-frame panel">
+            <img src="assets/AravindPhoto.jpg" alt="Aravind Mohan" class="about-photo" width="320" height="400">
+            <figcaption class="about-photo-caption">// ARAVIND MOHAN</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <div class="skills-strip">
+      <div class="skills-inner">
+        PYTHON <span>★</span> LLM AGENTS <span>★</span> TYPESCRIPT <span>★</span> NEXT.JS <span>★</span> FASTAPI <span>★</span> RAG <span>★</span> MULTI-AGENT SYSTEMS
+        PYTHON <span>★</span> LLM AGENTS <span>★</span> TYPESCRIPT <span>★</span> NEXT.JS <span>★</span> FASTAPI <span>★</span> RAG <span>★</span> MULTI-AGENT SYSTEMS
+      </div>
+    </div>
+
+    <section id="experience">
+      <h2 class="section-header cmyk" data-text="EXPERIENCE">EXPERIENCE</h2>
+      <div class="exp-list">
+
+        <div class="panel exp-item">
+          <div class="exp-meta">
+            AUG 2025<br>DEC 2025<br><br>HOUSTON, TX<br>(REMOTE)
+          </div>
+          <div>
+            <div class="exp-company">BIOSTATE AI</div>
+            <div class="exp-role">AI RESEARCH INTERN</div>
+            <p class="exp-desc">Built the evaluation harness for an autonomous research agent from scratch. Structured logging, replayable runs, failure categorization. Caught when the AI was confidently wrong before it reached scientists. Product scaled to 100K+ users. Co-authored 2 manuscripts.</p>
+          </div>
+        </div>
+
+        <div class="panel exp-item">
+          <div class="exp-meta">
+            OCT 2025<br>JAN 2026<br><br>SEATTLE, WA<br>(REMOTE)
+          </div>
+          <div>
+            <div class="exp-company">SWIRL LLC</div>
+            <div class="exp-role">SOFTWARE ENGINEER INTERN</div>
+            <p class="exp-desc">Shipped a full LLM personalization pipeline end to end. Product spec through QA and App Store rollout. Recommendation system, caching layer, Lambda offloading. Serving 1K+ active users.</p>
+          </div>
+        </div>
+
+        <div class="panel exp-item">
+          <div class="exp-meta">
+            JAN 2020<br>JUL 2024<br><br>BANGALORE<br>INDIA
+          </div>
+          <div>
+            <div class="exp-company">SIEMENS</div>
+            <div class="exp-role">SOFTWARE ENGINEER</div>
+            <p class="exp-desc">Core developer on Version Control Interface used by BMW, Tesla, and Audi at the same time. Cryptographic hash-based change tracking, GitHub integration, cross-platform versioning for industrial projects. Won the STAR Award.</p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <hr class="comic-divider">
+
+    <section id="projects">
+      <h2 class="section-header cmyk" data-text="WORK">WORK</h2>
+      <div class="projects-grid">
+
+        <div class="panel project-card dim-cineai">
+          <div class="project-tag">PRODUCTION · LLM · FULL STACK</div>
+          <div class="project-title">CINEAI</div>
+          <p class="project-desc">Hybrid movie recommendation platform. RAG over real reviews plus collaborative filtering. Tells you why a film fits, not just that it does.</p>
+          <a href="https://cineai-flame.vercel.app" class="project-link" target="_blank" rel="noopener">→ cineai-flame.vercel.app</a>
+        </div>
+
+        <div class="panel project-card dim-belong">
+          <div class="project-tag">FRONTEND · UI · PRODUCT</div>
+          <div class="project-title">BELONG</div>
+          <p class="project-desc">Community platform for recurring real-life gatherings. Built for the second visit. Helps first-timers become regulars.</p>
+          <a href="https://belong-black.vercel.app" class="project-link" target="_blank" rel="noopener">→ belong-black.vercel.app</a>
+        </div>
+
+        <div class="panel project-card dim-sim">
+          <div class="project-tag">CURIOSITY PROJECT · AGENTS</div>
+          <div class="project-title">MULTI-AGENT SIM</div>
+          <p class="project-desc">Two LLM villain agents coordinate to catch a hero with zero hardcoded strategy. Full engine, metrics, and logging from scratch. No frameworks.</p>
+          <a href="https://github.com/AravindMohan10/MultiAgentSimulation" class="project-link" target="_blank" rel="noopener">→ github.com/AravindMohan10</a>
+        </div>
+
+        <div class="panel project-card dim-eval">
+          <div class="project-tag">CURIOSITY PROJECT · EVAL</div>
+          <div class="project-title">AGENT EVAL HARNESS</div>
+          <p class="project-desc">Benchmarked an AI screening agent against real hire/reject outcomes. 95% accuracy. Found a real confidence calibration gap. Pre-baked results, no API key needed.</p>
+          <a href="https://github.com/AravindMohan10/asendia-voice-agent-eval" class="project-link" target="_blank" rel="noopener">→ github.com/AravindMohan10</a>
+        </div>
+
+        <div class="panel project-card dim-concrete">
+          <div class="project-tag">CURIOSITY PROJECT · DOMAIN AI</div>
+          <div class="project-title">CONCRETE TAKEOFF COPILOT</div>
+          <p class="project-desc">Upload a structural PDF, extract the footing schedule via Anthropic API, edit it, export bid-ready quantities. Next.js + FastAPI. Built in days for a construction AI startup.</p>
+          <a href="https://concrete-takeoff-copilot.vercel.app" class="project-link" target="_blank" rel="noopener">→ concrete-takeoff-copilot.vercel.app</a>
+        </div>
+
+        <div class="panel project-card dim-matraix">
+          <div class="project-tag">RESEARCH · OPEN SOURCE</div>
+          <div class="project-title">MATRAIX</div>
+          <p class="project-desc">Contributing to an 8B persona dataset for AI agent simulation research. Co-author on a paper submitted to Social Sim'26. Alongside researchers from MIT, Stanford, Harvard.</p>
+          <a href="https://huggingface.co/datasets/MatrAIx2026/MatrAIx2026" class="project-link" target="_blank" rel="noopener">→ HuggingFace dataset</a>
+        </div>
+
+      </div>
+    </section>
+
+    <hr class="comic-divider">
+
+    <section id="writing">
+      <h2 class="section-header cmyk" data-text="WRITING">WRITING</h2>
+      <div class="articles-list">
+
+        <a href="writing/feature-rivalry-gemma.html" class="panel article-item">
+          <div class="article-title">FEATURE RIVALRY IN GEMMA-2-2B</div>
+          <div class="article-tag">RESEARCH</div>
+        </a>
+
+        <a href="writing/basis-set-startup-evaluation.html" class="panel article-item">
+          <div class="article-title">HOW I EVALUATED 8 AI INFRASTRUCTURE STARTUPS</div>
+          <div class="article-tag">DILIGENCE</div>
+        </a>
+
+      </div>
+    </section>
+
+    <hr class="comic-divider">
+
+    <section id="notes" class="field-notes">
+      <h2 class="section-header cmyk" data-text="FIELD NOTES">FIELD NOTES</h2>
+      <div class="poster-wall">
+
+        <div class="poster panel">
+          <div class="poster-label">// RELOCATION</div>
+          <div class="poster-text">INDIA → USA → OPEN TO RELOCATE</div>
+        </div>
+
+        <div class="poster panel">
+          <div class="poster-label">// STATUS</div>
+          <div class="poster-text">CURIOSITY: ∞ · ACTIVE</div>
+        </div>
+
+        <div class="poster panel">
+          <div class="poster-label">// OPERATING MODE</div>
+          <div class="poster-text">HIGH AGENCY · PRODUCT TASTE</div>
+        </div>
+
+        <div class="poster panel">
+          <div class="poster-label">// DEFAULT</div>
+          <div class="poster-text">GRATEFUL</div>
+        </div>
+
+      </div>
+    </section>
+
+    <hr class="comic-divider">
+
+    <section id="hobbies" class="hobbies-section">
+      <h2 class="section-header cmyk" data-text="OFF DUTY">OFF DUTY</h2>
+      <p class="hobbies-lead">What I do when I'm not building.</p>
+      <div class="hobby-wall">
+
+        <article class="hobby-card panel hobby-valorant">
+          <div class="hobby-photo">
+            <img src="assets/valorant.png" alt="Valorant gameplay" width="400" height="260" loading="lazy">
+          </div>
+          <div class="hobby-body">
+            <div class="hobby-label">// VALORANT</div>
+            <div class="hobby-title">GOLD RANK. SEND TIPS.</div>
+            <p class="hobby-desc">Competitive FPS brain. Crosshair placement, comms, and the occasional heroic whiff. Gold player, still grinding ranked. If you have tips, I will actually read them.</p>
+          </div>
+        </article>
+
+        <article class="hobby-card panel hobby-football">
+          <div class="hobby-photo">
+            <img src="assets/hobbies/man-united.jpg" alt="Manchester United players celebrating on the pitch" width="400" height="260" loading="lazy">
+          </div>
+          <div class="hobby-body">
+            <div class="hobby-label">// FOOTBALL</div>
+            <div class="hobby-title">MANCHESTER UNITED. THROUGH THE HIGHS AND LOWS.</div>
+            <p class="hobby-desc">Grew up watching United. Still watch every match I can, still argue about the midfield, still believe the next season is ours. Some loyalties don't need a thesis.</p>
+          </div>
+        </article>
+
+        <article class="hobby-card panel hobby-trekking">
+          <div class="hobby-photo">
+            <img src="assets/hobbies/trekking.png" alt="Mountain lake surrounded by forest and peaks" width="400" height="260" loading="lazy">
+          </div>
+          <div class="hobby-body">
+            <div class="hobby-label">// TREKKING</div>
+            <div class="hobby-title">TRAILS OVER TILES.</div>
+            <p class="hobby-desc">Long walks, steep climbs, bad signal on purpose. The best ideas show up when there's nothing to refresh except the next switchback.</p>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <section id="contact" class="contact-section">
+      <div class="contact-big cmyk" data-text="LET'S BUILD SOMETHING.">LET'S BUILD<br>SOMETHING.</div>
+      <p class="contact-sub">
+        Open to founding engineer and full-stack × applied AI roles. Relocation flexible.
+      </p>
+      <div class="contact-links">
+        <a href="mailto:m.aravind619@gmail.com" class="contact-link">EMAIL</a>
+        <a href="https://github.com/AravindMohan10" class="contact-link" target="_blank" rel="noopener">GITHUB</a>
+        <a href="https://www.linkedin.com/in/aravindmohan1007" class="contact-link" target="_blank" rel="noopener">LINKEDIN</a>
+      </div>
+    </section>
+
+  </div>
+
+  <script src="js/halftone.js" defer></script>
+  <script src="js/stutter.js" defer></script>
+  <script src="js/intro.js" defer></script>
+  <script src="js/impact.js" defer></script>
+</body>
+</html>

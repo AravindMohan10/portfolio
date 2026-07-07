@@ -1,0 +1,229 @@
+/* ARTICLE / BLOG POST PAGES */
+
+body.article-page .site-root {
+  opacity: 1;
+  transform: none;
+}
+
+.article-page nav a.logo-link {
+  color: var(--yellow);
+  text-shadow: 2px 2px 0 var(--magenta), -1px -1px 0 var(--cyan);
+  font-size: 28px;
+  text-decoration: none;
+}
+
+.article-wrap {
+  max-width: 42rem;
+  margin: 0 auto;
+  padding: 108px 60px 96px;
+}
+
+.article-back {
+  display: inline-block;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 1px;
+  color: var(--cyan);
+  text-decoration: none;
+  margin-bottom: 32px;
+  border-bottom: 1px solid transparent;
+}
+
+.article-back:hover {
+  border-bottom-color: var(--cyan);
+}
+
+.article-header {
+  margin-bottom: 2.5rem;
+}
+
+.article-meta {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: var(--magenta);
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+.article-title {
+  font-family: 'Bangers', cursive;
+  font-size: clamp(36px, 6vw, 52px);
+  color: var(--yellow);
+  letter-spacing: 2px;
+  line-height: 1.1;
+  text-shadow: 3px 3px 0 var(--magenta);
+  margin-bottom: 20px;
+}
+
+.article-deck {
+  font-size: 1.25rem;
+  line-height: 1.75;
+  color: rgba(240, 238, 248, 0.88);
+}
+
+.article-body {
+  font-size: 1.125rem;
+  line-height: 1.85;
+  color: rgba(240, 238, 248, 0.9);
+}
+
+.article-body h2 {
+  font-family: 'Bangers', cursive;
+  font-size: clamp(26px, 4vw, 32px);
+  color: var(--white);
+  letter-spacing: 2px;
+  margin: 2.75rem 0 1.25rem;
+  text-shadow: 2px 2px 0 rgba(232, 23, 93, 0.4);
+}
+
+.article-body h3 {
+  font-family: 'Bangers', cursive;
+  font-size: clamp(22px, 3.5vw, 28px);
+  color: var(--cyan);
+  letter-spacing: 2px;
+  margin: 2rem 0 1rem;
+}
+
+.article-body h3:first-of-type {
+  margin-top: 1rem;
+}
+
+.article-body p {
+  margin-bottom: 1.35rem;
+}
+
+.article-body strong {
+  color: var(--white);
+  font-weight: 500;
+}
+
+.article-body em {
+  font-style: italic;
+  color: rgba(240, 238, 248, 0.95);
+}
+
+.article-body ul {
+  margin: 0 0 1.35rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.article-body li {
+  padding-left: 0.25rem;
+}
+
+.article-body a {
+  color: var(--cyan);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.article-body a:hover {
+  color: var(--yellow);
+}
+
+.article-body pre {
+  margin: 1.5rem 0;
+  padding: 1.25rem 1.5rem;
+  overflow-x: auto;
+  background: rgba(6, 3, 14, 0.95);
+  border: 2px solid rgba(57, 208, 216, 0.35);
+  box-shadow: 4px 4px 0 rgba(232, 23, 93, 0.25);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.78rem;
+  line-height: 1.6;
+  color: rgba(240, 238, 248, 0.88);
+}
+
+.article-body code {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.88em;
+  color: var(--cyan);
+}
+
+.article-body pre code {
+  font-size: inherit;
+  color: inherit;
+}
+
+.article-figure {
+  margin: 2rem 0;
+}
+
+.article-figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 2px solid var(--white);
+  box-shadow: 4px 4px 0 var(--magenta);
+}
+
+.article-figure figcaption {
+  margin-top: 10px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 1px;
+  color: rgba(240, 238, 248, 0.55);
+}
+
+.article-table-wrap {
+  overflow-x: auto;
+  margin: 1.5rem 0;
+}
+
+.article-body table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+.article-body th,
+.article-body td {
+  padding: 10px 14px;
+  border: 1px solid rgba(240, 238, 248, 0.2);
+  text-align: left;
+}
+
+.article-body th {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.75rem;
+  letter-spacing: 1px;
+  color: var(--cyan);
+  background: rgba(26, 10, 46, 0.8);
+}
+
+.article-body td {
+  background: rgba(11, 6, 22, 0.6);
+}
+
+.article-body hr {
+  border: none;
+  border-top: 1px dashed rgba(240, 238, 248, 0.2);
+  margin: 2.5rem 0;
+}
+
+.article-footer {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px dashed rgba(240, 238, 248, 0.2);
+  font-size: 0.95rem;
+  color: rgba(240, 238, 248, 0.65);
+  line-height: 1.7;
+}
+
+@media (max-width: 768px) {
+  .article-wrap {
+    padding: 96px 24px 64px;
+  }
+
+  .article-body {
+    font-size: 1.0625rem;
+  }
+
+  .article-body pre {
+    padding: 1rem;
+    font-size: 0.7rem;
+  }
+}

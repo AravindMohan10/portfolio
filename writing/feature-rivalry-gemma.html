@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Feature Rivalry in Gemma-2-2B · Aravind Mohan</title>
+  <meta name="description" content="I traced how Gemma-2-2B overrides its training when you give it conflicting facts in the prompt. One attention layer, two rival SAE features, and a mechanism stranger than I expected.">
+  <meta property="og:title" content="Feature Rivalry in Knowledge Conflict: Peeking Inside Gemma-2-2B">
+  <meta property="og:description" content="Mechanistic interpretability on factual override: one attention layer, rival sparse features, and a flip that barely looks at the new fact.">
+  <meta property="og:type" content="article">
+  <meta property="og:image" content="https://aravindmohan.dev/assets/logit_attribution_delta.png">
+  <meta property="og:url" content="https://aravindmohan.dev/writing/feature-rivalry-gemma">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Caveat:wght@400;600;700&family=Share+Tech+Mono&family=Space+Grotesk:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/foundation.css?v=6">
+  <link rel="stylesheet" href="../css/article.css?v=1">
+</head>
+<body class="article-page">
+
+  <div class="bg-stack" aria-hidden="true">
+    <div class="bg-gradient"></div>
+    <div class="bg-halftone" id="bg-halftone">
+      <div class="bg-halftone__tile"></div>
+      <canvas class="bg-halftone__canvas" id="halftone-canvas"></canvas>
+    </div>
+    <div class="bg-wash"></div>
+    <div class="paper-grain"></div>
+    <div class="vignette"></div>
+  </div>
+
+  <div class="site-root">
+
+    <nav>
+      <a href="../index.html" class="logo-link">AM</a>
+      <div style="display:flex;gap:24px;">
+        <a href="../index.html#about">ABOUT</a>
+        <a href="../index.html#experience">EXP</a>
+        <a href="../index.html#projects">WORK</a>
+        <a href="../index.html#writing">WRITING</a>
+        <a href="../index.html#contact">CONTACT</a>
+      </div>
+    </nav>
+
+    <article class="article-wrap">
+      <a href="../index.html#writing" class="article-back">← BACK TO WRITING</a>
+
+      <header class="article-header">
+        <div class="article-meta">Research · Jul 2026</div>
+        <h1 class="article-title">Feature Rivalry in Knowledge Conflict</h1>
+        <p class="article-deck">Peeking inside Gemma-2-2B when it has to contradict what it learned in training.</p>
+      </header>
+
+      <div class="article-body">
+        <p>Every language model carries two kinds of knowledge at once. There is what it learned during training ("the capital of France is Paris"), and whatever you tell it in the prompt right now ("actually, for this exercise, the capital of France is Berlin"). Ask it a question after that, and it usually goes with the prompt. That is the behavior we all rely on when we give a model new context.</p>
+
+        <p>But how does that override actually happen inside the network? Is it one component making the call, or a diffuse vote across the whole model? And if it is a specific mechanism, can we find it, name it, and watch it work?</p>
+
+        <p>I spent a few weeks trying to answer that for Gemma-2-2B, using mechanistic interpretability tools (TransformerLens and Gemma Scope SAEs) to trace a factual override from the residual stream down to individual attention heads and sparse features. Here is what I found.</p>
+
+        <h2>The setup</h2>
+
+        <p><strong>Hypothesis:</strong> under a deliberate factual conflict ("the capital has been reassigned to Berlin"), late attention heads shift their vote away from the trained answer and toward the contextual one. And this shift is consistent across many unrelated facts, not just the Paris/Berlin example.</p>
+
+        <p><strong>Method:</strong> direct logit attribution (DLA). This decomposes the model's final output logit into the individual contribution of every attention layer and MLP layer in the residual stream. So you can ask "how much did layer 14's attention output push toward Berlin versus Paris, at this specific position?" instead of only seeing the final aggregate answer.</p>
+
+        <p><strong>Dataset:</strong> 50 conflict prompts spanning geography, science, history, literature, astronomy, and the natural world. Each one paired with a matched control prompt with identical structure but no override instruction.</p>
+
+        <p>The core attribution function is simple. Cache every attention and MLP output, project each one onto the unembedding direction for the target token, and read off the dot product:</p>
+
+        <pre><code>def direct_logit_attribution(prompt, model, target_tokens=[" Paris", " Berlin"]):
+    tokens = model.to_tokens(prompt)
+    with torch.no_grad():
+        _, cache = model.run_with_cache(
+            tokens,
+            names_filter=lambda name: (
+                name.endswith("attn_out") or
+                name.endswith("mlp_out") or
+                name == "hook_embed"
+            )
+        )
+    W_U = model.W_U.float()
+    results = {}
+    for tok in target_tokens:
+        idx = model.to_single_token(tok)
+        direction = W_U[:, idx]
+        contributions = {"embed": (cache["hook_embed"][0, -1, :].float() @ direction).item()}
+        for layer in range(model.cfg.n_layers):
+            attn_out = cache[f"blocks.{layer}.hook_attn_out"][0, -1, :].float()
+            mlp_out = cache[f"blocks.{layer}.hook_mlp_out"][0, -1, :].float()
+            contributions[f"attn_{layer}"] = (attn_out @ direction).item()
+            contributions[f"mlp_{layer}"] = (mlp_out @ direction).item()
+        results[tok] = contributions
+    return results</code></pre>
+
+        <h2>Finding 1: one attention layer does most of the work</h2>
+
+        <p>Running this across all 50 conflict/control pairs and ranking which component's contribution shifts most between the two conditions gives a clean answer:</p>
+
+        <div class="article-table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Component</th>
+                <th>Control</th>
+                <th>Conflict</th>
+                <th>Delta</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>attn_25</strong></td>
+                <td>20.36</td>
+                <td>29.41</td>
+                <td><strong>+9.04</strong></td>
+              </tr>
+              <tr>
+                <td>mlp_25</td>
+                <td>-1.49</td>
+                <td>6.94</td>
+                <td>+8.43</td>
+              </tr>
+              <tr>
+                <td>attn_22</td>
+                <td>-3.93</td>
+                <td>-1.79</td>
+                <td>+2.14</td>
+              </tr>
+              <tr>
+                <td>mlp_23</td>
+                <td>-6.98</td>
+                <td>-5.74</td>
+                <td>+1.24</td>
+              </tr>
+              <tr>
+                <td>attn_24</td>
+                <td>-2.22</td>
+                <td>-1.31</td>
+                <td>+0.91</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p><code>attn_25</code>, the second-to-last attention layer in this 26-layer model, dominates the shift. <code>mlp_25</code> is right behind it. Going in, I had guessed both <code>attn_22</code> and <code>attn_25</code> as candidates based on the usual "late layers decide" intuition. The data narrowed it to <code>attn_25</code> and <code>mlp_25</code>, with <code>attn_22</code> an order of magnitude smaller.</p>
+
+        <figure class="article-figure">
+          <img src="../assets/logit_attribution_delta.png" alt="Delta in logit attribution between conflict and control conditions, by component">
+          <figcaption>Delta in logit attribution between conflict and control, by component.</figcaption>
+        </figure>
+
+        <figure class="article-figure">
+          <img src="../assets/logit_attribution_absolute.png" alt="Absolute logit attribution values for conflict vs control conditions">
+          <figcaption>Absolute logit attribution for conflict vs control.</figcaption>
+        </figure>
+
+        <h2>Finding 2: rival features inside the same layer</h2>
+
+        <p>Knowing which layer flips is not the same as knowing what concept it is representing. So I loaded Google DeepMind's Gemma Scope sparse autoencoder for layer 25 (16,384 features decomposed from the 2,304-dim residual stream) and compared which features were active under conflict versus control.</p>
+
+        <p>Two features stood out immediately:</p>
+
+        <ul>
+          <li><strong>Feature 14325.</strong> Mean activation jumps from 38.6 (control) to 63.0 (conflict). The single largest gain of any feature.</li>
+          <li><strong>Feature 13749.</strong> Mean activation drops from 66.0 (control) to 32.5 (conflict). The single largest loss.</li>
+        </ul>
+
+        <p>The interesting part is what happens when you compare their decoder directions directly. The cosine similarity between feature 14325 and feature 13749 is <strong>-0.9966</strong>, almost perfectly anti-correlated. These are not two unrelated features that happen to move in opposite directions on this one prompt type. Geometrically, they point in nearly opposite directions in the residual stream. It looks like a genuine rival pair: one feature encodes "go with the contextual answer," the other encodes "go with the trained answer," and the conflict prompt tips the balance from one to the other.</p>
+
+        <h2>Finding 3: the head barely looks at the new fact, but still uses it</h2>
+
+        <p>This is the part that complicated the story in a useful way. If a head at layer 25 is going to vote for "Berlin," a natural guess is that it directly attends to the token "Berlin" in the prompt. I checked this across all 50 pairs.</p>
+
+        <p>It mostly does not. Mean attention to the actual counterfactual token from the final position was only <strong>0.05</strong>. Attention is overwhelmingly captured by the <code>&lt;bos&gt;</code> token (an attention sink, roughly 0.42 on average) and by nearby structural tokens like "to." Yet despite barely looking at "Berlin" directly, the head still reliably pushes the output toward it. All 50 out of 50 times.</p>
+
+        <p>Source-token DLA resolved this. Instead of asking only which layer votes for the answer, you decompose which token position the value it uses came from:</p>
+
+        <pre><code>def source_token_dla(prompt, model, layer=25,
+                     parametric_token=" Paris",
+                     counterfactual_token=" Berlin"):
+    tokens = model.to_tokens(prompt)
+    ... # cache attention pattern + value vectors at `layer`
+    for s, tok in enumerate(token_strs):
+        for h in range(n_heads):
+            attn_w = pattern[h, -1, s].item()
+            contribution = attn_w * (v[s, kv_h, :] @ W_O[h])
+            paris_total += (contribution @ paris_dir).item()
+            berlin_total += (contribution @ berlin_dir).item()
+        source_contributions[tok] = {"net_berlin": berlin_total - paris_total, ...}</code></pre>
+
+        <p>Even a small amount of attention weight on the counterfactual token carries a disproportionately large logit contribution once you factor in its value vector. Averaged across 20 validated conflict/control pairs (each checked to confirm the model actually outputs the counterfactual answer under conflict and the parametric answer under control, 20/20 passed):</p>
+
+        <div class="article-table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Token group</th>
+                <th>Control</th>
+                <th>Conflict</th>
+                <th>Delta</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Counterfactual token (e.g. "Berlin")</td>
+                <td>0.000</td>
+                <td><strong>+0.080</strong></td>
+                <td>+0.080</td>
+              </tr>
+              <tr>
+                <td>Subject token (e.g. "Paris")</td>
+                <td>-0.028</td>
+                <td>-0.006</td>
+                <td>+0.023</td>
+              </tr>
+              <tr>
+                <td>All other tokens</td>
+                <td>-0.617</td>
+                <td>+0.045</td>
+                <td>+0.662</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>So the mechanism is not "attend more to the new fact." It is closer to this: a small, consistent read from the counterfactual token's value vector is enough to flip the vote, while the subject token's own contribution, which was actively working against the override in the control condition, gets suppressed almost to zero.</p>
+
+        <h2>What this adds up to</h2>
+
+        <p>Under factual conflict, <code>attn_25</code> (backed by <code>mlp_25</code>) is the layer where the override actually happens. A specific, sharply anti-correlated pair of SAE features (14325 vs 13749) represents the two competing answers at that layer. And mechanistically, the flip is driven less by attending harder to the new fact and more by a small but reliable read of it combined with suppression of the old subject's influence.</p>
+
+        <p>None of this was obvious going in. The original hypothesis guessed at two candidate layers based on general intuition about late layers doing final decision-making. The data picked out one specific layer and its paired MLP, then handed me a much stranger and more specific story about how that layer does its job than I expected.</p>
+
+        <hr>
+
+        <footer class="article-footer">
+          <p><strong>Caveats:</strong> this is one model (Gemma-2-2B), one SAE (Gemma Scope, layer 25, 16K features), and conflict prompts built around explicit "has been reassigned to X" framing. It is not yet clear how much of this generalizes to implicit or more adversarial conflict framings, or to larger models. That is the natural next step.</p>
+          <p>Tools: Gemma-2-2B via <a href="https://github.com/TransformerLensOrg/TransformerLens" target="_blank" rel="noopener">TransformerLens</a>, Gemma Scope SAEs from Google DeepMind.</p>
+        </footer>
+      </div>
+    </article>
+
+  </div>
+
+  <script src="../js/halftone.js" defer></script>
+</body>
+</html>
