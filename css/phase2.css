@@ -31,19 +31,16 @@
 .project-card:nth-child(2) { grid-column: 5 / 7; grid-row: 1; }
 .project-card:nth-child(3) { grid-column: 5 / 7; grid-row: 2; }
 .project-card:nth-child(4) { grid-column: 1 / 3; grid-row: 3; }
-.project-card:nth-child(5) { grid-column: 3 / 5; grid-row: 3; }
-.project-card:nth-child(6) { grid-column: 5 / 7; grid-row: 3 / 5; }
+.project-card:nth-child(5) { grid-column: 3 / 7; grid-row: 3 / 5; }
 
 .project-card:nth-child(2) { transform: rotate(0.6deg); }
 .project-card:nth-child(3) { transform: rotate(-0.5deg); }
-.project-card:nth-child(5) { transform: rotate(0.4deg); }
-.project-card:nth-child(6) { transform: rotate(-0.3deg); }
+.project-card:nth-child(5) { transform: rotate(-0.3deg); }
 
 .project-card:nth-child(1):hover { transform: translate(-5px, -5px) rotate(-0.8deg); }
 .project-card:nth-child(2):hover { transform: translate(-4px, -4px) rotate(0.2deg); }
 .project-card:nth-child(3):hover { transform: translate(-4px, -4px) rotate(-0.8deg); }
-.project-card:nth-child(5):hover { transform: translate(-4px, -4px) rotate(0.6deg); }
-.project-card:nth-child(6):hover { transform: translate(-4px, -4px) rotate(-0.5deg); }
+.project-card:nth-child(5):hover { transform: translate(-4px, -4px) rotate(-0.5deg); }
 
 /* DIMENSION PALETTES */
 .dim-cineai {
@@ -107,21 +104,6 @@
   overflow: hidden;
 }
 
-.dim-concrete {
-  --dim-accent: var(--cyan);
-  --dim-glow: rgba(57, 208, 216, 0.22);
-  --dim-title: #f5e642;
-  background:
-    linear-gradient(
-      165deg,
-      rgba(10, 20, 32, 0.84) 0%,
-      rgba(10, 20, 32, 0.68) 45%,
-      rgba(10, 20, 32, 0.28) 100%
-    ),
-    url('../assets/concrete.png') center top / cover no-repeat;
-  overflow: hidden;
-}
-
 .dim-matraix {
   --dim-accent: #c9a0ff;
   --dim-glow: rgba(201, 160, 255, 0.2);
@@ -142,7 +124,6 @@
 .dim-belong .project-tag { color: #7bdcb5; }
 .dim-sim .project-tag { color: #b44dff; }
 .dim-eval .project-tag { color: rgba(240, 238, 248, 0.7); }
-.dim-concrete .project-tag { color: var(--cyan); }
 .dim-matraix .project-tag { color: #c9a0ff; }
 
 .project-title { color: var(--dim-title); }
